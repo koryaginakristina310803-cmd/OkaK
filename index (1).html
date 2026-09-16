@@ -1,0 +1,660 @@
+<title>FARAGRAV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0d0e;
+    --bg-grain: rgba(255,255,255,0.02);
+    --surface:#18191b;
+    --surface-2:#212325;
+    --border:#313336;
+    --text:#e9e6dd;
+    --text-dim:#8d8f91;
+    --accent:#ef3b23;
+    --accent-ink:#180702;
+    --hazard:#e8c200;
+    --chrome:#9aa2a8;
+    --plate-bg:#eef1ea;
+    --plate-text:#101214;
+    --plate-strip:#1451a3;
+    --duct:#c7bd9c;
+    --duct-2:#b3a884;
+    --duct-ink:#171410;
+  }
+  :root:not([data-theme="light"]){ color-scheme: dark; }
+
+  :root[data-theme="light"]{
+    --bg:#efece2;
+    --surface:#ffffff;
+    --surface-2:#e6e1d1;
+    --border:#cfc8b0;
+    --text:#191712;
+    --text-dim:#6b6656;
+    --accent:#c8330f;
+    --accent-ink:#fff3ee;
+    --hazard:#b8930a;
+    --chrome:#5c6469;
+    --plate-bg:#111214;
+    --plate-text:#f0efe8;
+    --plate-strip:#1451a3;
+    --duct:#d8d0b0;
+    --duct-2:#c4b990;
+    --duct-ink:#171410;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#efece2;
+      --surface:#ffffff;
+      --surface-2:#e6e1d1;
+      --border:#cfc8b0;
+      --text:#191712;
+      --text-dim:#6b6656;
+      --accent:#c8330f;
+      --accent-ink:#fff3ee;
+      --hazard:#b8930a;
+      --chrome:#5c6469;
+      --duct:#d8d0b0;
+      --duct-2:#c4b990;
+      --duct-ink:#171410;
+      --plate-bg:#111214;
+      --plate-text:#f0efe8;
+      --plate-strip:#1451a3;
+      color-scheme: light;
+    }
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 42%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    padding-inline:20px;
+  }
+  .wrap{max-width:980px; margin:0 auto;}
+  a{color:inherit;}
+
+  .mono{ font-family:'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+
+  .tape{
+    height:9px;
+    background: repeating-linear-gradient(135deg, var(--hazard) 0 14px, #171718 14px 28px);
+    border-radius:1px;
+    margin-block:0;
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+
+  header.top{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-block:30px;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .brand{ display:flex; align-items:center; gap:18px; }
+  .plate{
+    display:flex; align-items:stretch;
+    background:var(--plate-bg);
+    border-radius:3px;
+    overflow:hidden;
+    border:1.5px solid #000;
+    box-shadow:0 1px 0 rgba(0,0,0,0.4);
+  }
+  .plate-strip{
+    width:14px;
+    background:var(--plate-strip);
+    display:flex; align-items:flex-end; justify-content:center;
+    padding-bottom:2px;
+  }
+  .plate-strip span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:5px; color:#fff; writing-mode:vertical-rl; letter-spacing:0;
+  }
+  .plate-text{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:0.86rem;
+    color:var(--plate-text);
+    padding:4px 9px;
+    letter-spacing:0.04em;
+  }
+  .brand-name{
+    font-family:'Bebas Neue', 'Manrope', sans-serif;
+    font-size:clamp(2.6rem, 6.4vw, 4rem);
+    letter-spacing:0.02em;
+    color:var(--text);
+    text-transform:uppercase;
+    position:relative;
+    display:inline-block;
+    transform:skewX(-6deg);
+    text-shadow:
+      2px 0 0 color-mix(in srgb, var(--accent) 75%, transparent),
+      -1px 0 0 color-mix(in srgb, var(--hazard) 45%, transparent);
+    line-height:0.9;
+  }
+  .brand-name::after{
+    content:"";
+    position:absolute; left:1px; right:-6px; bottom:-6px;
+    height:4px;
+    background:repeating-linear-gradient(115deg, var(--hazard) 0 8px, #171718 8px 16px);
+    transform:skewX(6deg) rotate(-1deg);
+    opacity:0.85;
+  }
+  nav.top-links{ display:flex; gap:20px; font-size:0.85rem; color:var(--text-dim); }
+  nav.top-links a{ text-decoration:none; }
+  nav.top-links a:hover{ color:var(--accent); }
+
+  /* HERO */
+  .hero{
+    position:relative;
+    padding-block: 50px 52px;
+    display:grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap:36px;
+    align-items:center;
+  }
+  @media (max-width:720px){ .hero{ grid-template-columns:1fr; padding-block:34px 30px; } }
+
+  .hero h1{
+    font-family:'Bebas Neue', 'Manrope', sans-serif;
+    font-weight:400;
+    font-size:clamp(2.8rem, 8vw, 5rem);
+    line-height:0.96;
+    letter-spacing:0.01em;
+    margin:14px 0 18px;
+    text-wrap:balance;
+  }
+  .hero h1 .hl{ color:var(--accent); }
+  .hero p.lead{
+    font-size:1.05rem; line-height:1.6; color:var(--text-dim);
+    max-width:48ch; margin:0 0 22px;
+  }
+  .spec-row{
+    display:flex; gap:18px; flex-wrap:wrap;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.76rem; color:var(--text-dim);
+    margin-bottom:26px;
+    border-top:1px dashed var(--border); border-bottom:1px dashed var(--border);
+    padding-block:10px;
+  }
+  .spec-row b{ color:var(--text); }
+
+  .cta-row{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 24px;
+    border-radius:2px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.84rem; font-weight:700;
+    letter-spacing:0.02em;
+    text-decoration:none;
+    border:1px solid transparent;
+    transition: transform .15s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); }
+  .btn-ghost{ border-color:var(--border); color:var(--text); background:transparent; }
+  .btn-ghost:hover{ border-color:var(--accent); }
+
+  /* badge */
+  .badge-wrap{ position:relative; max-width:320px; margin-inline:auto; }
+  .badge{ width:100%; aspect-ratio:1/1; display:block; }
+  .badge-core{
+    filter: drop-shadow(0 0 24px color-mix(in srgb, var(--accent) 30%, transparent));
+  }
+
+  /* mood grid */
+  .mood-grid{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows:90px;
+    gap:6px;
+  }
+  @media (max-width:720px){
+    .mood-grid{ grid-template-columns:repeat(3, 1fr); grid-auto-rows:76px; }
+  }
+  .mood-tile{
+    position:relative;
+    overflow:hidden;
+    border-radius:2px;
+    border:1.5px dashed var(--border);
+    background:var(--surface);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px;
+    transition: border-color .15s ease;
+  }
+  .mood-tile:hover{ border-color:var(--accent); }
+  .mood-tile.wide{ grid-column:span 2; }
+  .mood-tile.tall{ grid-row:span 2; }
+  .mood-tile.big{ grid-column:span 2; grid-row:span 2; }
+  .mood-tile svg{ width:26px; height:26px; opacity:0.45; flex:none; }
+  .mood-tile .cap{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.6rem; letter-spacing:0.08em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    text-align:center;
+    padding-inline:6px;
+  }
+
+  section{ padding-block:48px; }
+  .divider{ padding-block:0; }
+  h2.section-title{
+    font-family:'Bebas Neue', 'Manrope', sans-serif;
+    font-weight:400;
+    font-size:clamp(1.9rem, 4.4vw, 2.7rem);
+    letter-spacing:0.01em;
+    margin:6px 0 8px;
+  }
+  p.section-sub{ color:var(--text-dim); max-width:58ch; line-height:1.6; margin:0 0 30px; }
+
+  /* services */
+  .services{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+  @media (max-width:720px){ .services{ grid-template-columns:1fr; } }
+  .service-card{
+    background:var(--surface);
+    border:1.5px dashed var(--border);
+    border-radius:3px;
+    padding:22px 18px;
+    position:relative;
+    display:flex; flex-direction:column; gap:10px;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .service-card:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  .service-card .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.66rem; color:var(--accent); letter-spacing:0.1em;
+  }
+  .service-card h3{ font-size:1.05rem; margin:2px 0 0; font-weight:800; font-family:'Bebas Neue', sans-serif; letter-spacing:0.02em; font-size:1.35rem;}
+  .service-card p{ font-size:0.89rem; color:var(--text-dim); line-height:1.55; margin:0; }
+
+  /* process */
+  .process{
+    display:grid; grid-template-columns:repeat(4, 1fr);
+    border:1px solid var(--border); border-radius:3px; overflow:hidden;
+    background:var(--surface);
+  }
+  @media (max-width:720px){ .process{ grid-template-columns:1fr; } }
+  .step{ padding:20px 18px; border-right:1px solid var(--border); }
+  .step:last-child{ border-right:none; }
+  @media (max-width:720px){
+    .step{ border-right:none; border-bottom:1px solid var(--border); }
+    .step:last-child{ border-bottom:none; }
+  }
+  .step .num{ font-family:'JetBrains Mono', monospace; color:var(--accent); font-size:0.9rem; font-weight:700; display:block; margin-bottom:10px; }
+  .step h4{ margin:0 0 8px; font-size:0.95rem; font-family:'Bebas Neue', sans-serif; letter-spacing:0.02em; font-weight:400; font-size:1.15rem;}
+  .step p{ margin:0; font-size:0.85rem; color:var(--text-dim); line-height:1.55; }
+
+  /* callout */
+  .callout{
+    border:1px solid var(--border);
+    border-radius:4px;
+    overflow:hidden;
+    background:var(--surface);
+  }
+  .callout-body{
+    padding:28px 26px;
+    display:grid; grid-template-columns: 1fr auto; gap:20px; align-items:center;
+  }
+  @media (max-width:640px){ .callout-body{ grid-template-columns:1fr; } }
+  .callout h3{
+    font-family:'Bebas Neue', sans-serif; font-weight:400;
+    font-size:1.8rem; margin:0 0 10px; letter-spacing:0.01em;
+  }
+  .callout p{ margin:0; color:var(--text-dim); line-height:1.6; max-width:50ch; }
+  .callout .price{ font-family:'JetBrains Mono', monospace; font-size:0.8rem; color:var(--accent); margin-top:10px; display:block; }
+
+  /* portfolio */
+  .portfolio{ display:grid; grid-template-columns: 260px 1fr; gap:28px; align-items:center; }
+  @media (max-width:640px){ .portfolio{ grid-template-columns:1fr; } }
+  .plate-frame{
+    aspect-ratio:4/3;
+    border-radius:4px;
+    border:1px solid var(--border);
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 25% 15%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 55%),
+      linear-gradient(160deg, var(--surface-2), var(--surface));
+  }
+  .plate-frame svg{ width:100%; height:100%; display:block; }
+  .rivet{
+    position:absolute; width:7px; height:7px; border-radius:50%;
+    background:var(--chrome); opacity:0.7;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4);
+  }
+  .plate-caption{
+    position:absolute; left:12px; bottom:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.66rem; letter-spacing:0.06em; color:var(--text-dim);
+    background:color-mix(in srgb, var(--bg) 55%, transparent);
+    padding:3px 7px; border-radius:2px;
+  }
+  .portfolio-note h3{ margin:0 0 10px; font-size:1.1rem; font-family:'Bebas Neue', sans-serif; letter-spacing:0.02em; font-weight:400; font-size:1.5rem; }
+  .portfolio-note p{ color:var(--text-dim); line-height:1.6; margin:0 0 6px; }
+
+  /* contact */
+  .contact-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
+  @media (max-width:720px){ .contact-grid{ grid-template-columns:1fr; } }
+
+  .contact-card{
+    display:flex; flex-direction:column; gap:10px; align-items:flex-start;
+  }
+  .contact-card .k{
+    font-family:'JetBrains Mono', monospace; font-size:0.66rem;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim);
+  }
+  .plate-lg{
+    display:flex; align-items:stretch;
+    width:100%;
+    background:var(--plate-bg);
+    border:2px solid #101214;
+    border-radius:5px;
+    overflow:hidden;
+    box-shadow:0 2px 0 rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.25);
+    text-decoration:none;
+    transition: transform .15s ease;
+    position:relative;
+  }
+  a.plate-lg:hover{ transform:translateY(-2px); }
+  .plate-lg .bolt{
+    position:absolute; width:5px; height:5px; border-radius:50%;
+    background:#0003; box-shadow:inset 0 0 0 1px rgba(0,0,0,0.5);
+  }
+  .plate-lg .bolt.tl{ top:6px; left:6px; }
+  .plate-lg .bolt.br{ bottom:6px; right:6px; }
+  .plate-lg .strip{
+    width:22px; flex:none;
+    background:var(--plate-strip);
+    display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+    padding-block:6px;
+  }
+  .plate-lg .strip .stars{ color:#fff; font-size:7px; letter-spacing:1px; }
+  .plate-lg .strip .rus{
+    font-family:'JetBrains Mono', monospace; font-weight:700;
+    font-size:8px; color:#fff; letter-spacing:0.02em;
+  }
+  .plate-lg .num{
+    flex:1;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:1.15rem;
+    color:var(--plate-text);
+    padding:10px 8px;
+    letter-spacing:0.03em;
+    text-align:center;
+  }
+
+  footer{
+    padding-block:26px 40px;
+    color:var(--text-dim); font-size:0.78rem;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-family:'JetBrains Mono', monospace;
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="tape" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand">
+      <span class="brand-name">FARAGRAV</span>
+    </div>
+    <nav class="top-links">
+      <a href="#services">Услуги</a>
+      <a href="#process">Процесс</a>
+      <a href="#model">Стать моделью</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">FARAGRAV · Гараж · Ручная гравировка · Москва</span>
+      <h1>ФАРА —<br>ЭТО ТОЖЕ<br><span class="hl">ХОЛСТ</span></h1>
+      <p class="lead">Андеграундная гравировка по автомобильным фарам вручную — гравером и бормашинкой. От classic'а АвтоВАЗа до японских тюнеров: надписи, монограммы, узоры и эмблемы марок прямо на стекле.</p>
+      <div class="spec-row mono">
+        <span>ТЕХНИКА: <b>ГРАВЁР / БОРМАШИНКА</b></span>
+        <span>РЕГИОН: <b>МОСКВА</b></span>
+        <span>ФОРМАТ: <b>ПОД ЗАКАЗ</b></span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://t.me/FaraGrav_bot">ОФОРМИТЬ ЗАКАЗ</a>
+        <a class="btn btn-ghost" href="tel:+79151384145">ПОЗВОНИТЬ</a>
+      </div>
+    </div>
+    <div class="badge-wrap">
+      <svg class="badge badge-core" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="ring" d="M150,30 a120,120 0 1,1 -0.1,0" />
+          <radialGradient id="core" cx="40%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="color-mix(in srgb, var(--accent) 70%, white 10%)"/>
+            <stop offset="100%" stop-color="color-mix(in srgb, var(--accent) 55%, black 30%)"/>
+          </radialGradient>
+        </defs>
+        <circle cx="150" cy="150" r="146" fill="none" stroke="var(--border)" stroke-width="1.5"/>
+        <circle cx="150" cy="150" r="118" fill="none" stroke="var(--border)" stroke-width="1"/>
+        <text font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="4" fill="var(--text-dim)">
+          <textPath href="#ring" startOffset="0%">ГРАВИРОВКА НА ФАРАХ • МОСКВА • ВРУЧНУЮ • </textPath>
+        </text>
+        <circle cx="150" cy="150" r="70" fill="url(#core)" stroke="var(--accent)" stroke-width="2"/>
+        <g stroke="var(--bg)" stroke-width="1.4" opacity="0.55">
+          <path d="M104 150 q46 -46 92 0" fill="none"/>
+          <path d="M104 150 q46 46 92 0" fill="none"/>
+          <ellipse cx="150" cy="150" rx="46" ry="32" fill="none"/>
+        </g>
+        <g transform="translate(150,158) skewX(-6) translate(-150,-158)">
+          <text x="152" y="158" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="30" fill="var(--hazard)" opacity="0.7">FG</text>
+          <text x="149" y="158" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="30" fill="#fff" opacity="0.8">FG</text>
+          <text x="150.5" y="158" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="30" fill="var(--bg)">FG</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <div class="tape divider" aria-hidden="true"></div>
+
+  <section id="mood" style="padding-block:40px;">
+    <span class="eyebrow">Атмосфера</span>
+    <h2 class="section-title">Гаражная сцена</h2>
+    <p class="section-sub">Ночные дворы, неон под капотом, мокрый асфальт — среда, для которой делается эта гравировка.</p>
+    <div class="mood-grid">
+      <div class="mood-tile big">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 1</span>
+      </div>
+      <div class="mood-tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 2</span>
+      </div>
+      <div class="mood-tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 3</span>
+      </div>
+      <div class="mood-tile wide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 4</span>
+      </div>
+      <div class="mood-tile tall">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 5</span>
+      </div>
+      <div class="mood-tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 6</span>
+      </div>
+      <div class="mood-tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 7</span>
+      </div>
+      <div class="mood-tile wide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 8</span>
+      </div>
+      <div class="mood-tile tall">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 9</span>
+      </div>
+      <div class="mood-tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="5" width="20" height="15" rx="1.5"/><path d="M2 17l5-5 4 4 5-6 6 7" /><circle cx="8" cy="9" r="1.6"/></svg>
+        <span class="cap">Фото 10</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="tape divider" aria-hidden="true"></div>
+
+  <section id="services">
+    <span class="eyebrow">Услуги</span>
+    <h2 class="section-title">Что можно выгравировать</h2>
+    <p class="section-sub">Каждая работа — вручную, под конкретную фару и форму рассеивателя. Перед гравировкой всегда согласовываем эскиз.</p>
+    <div class="services">
+      <div class="service-card">
+        <span class="tag mono">01 / ТЕКСТ</span>
+        <h3>Надписи и монограммы</h3>
+        <p>Имя, дата, инициалы — памятная гравировка или подарок владельцу авто.</p>
+      </div>
+      <div class="service-card">
+        <span class="tag mono">02 / УЗОР</span>
+        <h3>Узоры и орнаменты</h3>
+        <p>Авторский декоративный рисунок под стиль машины — от строгой геометрии до растительных мотивов.</p>
+      </div>
+      <div class="service-card">
+        <span class="tag mono">03 / ЭМБЛЕМА</span>
+        <h3>Логотипы и эмблемы марок</h3>
+        <p>Фирменный знак вашего автомобиля или бренда, перенесённый на стекло фары.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" style="padding-top:0;">
+    <span class="eyebrow">Процесс</span>
+    <h2 class="section-title">Как проходит работа</h2>
+    <p class="section-sub">Четыре шага от идеи до готовой фары.</p>
+    <div class="process">
+      <div class="step">
+        <span class="num mono">01</span>
+        <h4>Консультация</h4>
+        <p>Обсуждаем идею, место на фаре и примерный размер гравировки.</p>
+      </div>
+      <div class="step">
+        <span class="num mono">02</span>
+        <h4>Эскиз</h4>
+        <p>Рисую макет под конкретную фару, согласовываем детали перед работой.</p>
+      </div>
+      <div class="step">
+        <span class="num mono">03</span>
+        <h4>Гравировка</h4>
+        <p>Работаю вручную гравером и бормашинкой — аккуратно, без спешки.</p>
+      </div>
+      <div class="step">
+        <span class="num mono">04</span>
+        <h4>Финал</h4>
+        <p>Обработка кромок, финальный осмотр и фото результата.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="model" style="padding-top:0;">
+    <span class="eyebrow">Первым клиентам</span>
+    <h2 class="section-title">Станьте одной из первых моделей</h2>
+    <div class="callout">
+      <div class="tape" aria-hidden="true"></div>
+      <div class="callout-body">
+        <div>
+          <h3>Портфолио пока небольшое — набираю опыт</h3>
+          <p>Приглашаю владельцев авто на гравировку по себестоимости: вы получаете уникальный рисунок на фаре, я — фото для портфолио.</p>
+          <span class="price mono">ОПЛАТА ТОЛЬКО РАСХОДНИКОВ · НЕ БОЛЕЕ 1000 ₽</span>
+        </div>
+        <a class="btn btn-primary" href="https://t.me/FaraGrav_bot">ЗАПИСАТЬСЯ</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" style="padding-top:0;">
+    <span class="eyebrow">Портфолио</span>
+    <h2 class="section-title">Пример работы</h2>
+    <div class="portfolio">
+      <div class="plate-frame">
+        <svg viewBox="0 0 260 195" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="glow2" cx="28%" cy="20%" r="70%">
+              <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="260" height="195" fill="url(#glow2)"/>
+          <g fill="none" stroke="var(--text)" stroke-opacity="0.5" stroke-width="1.3">
+            <ellipse cx="130" cy="97" rx="56" ry="40"/>
+            <ellipse cx="130" cy="97" rx="40" ry="28"/>
+            <path d="M96 97 q34 -34 68 0" />
+            <path d="M96 97 q34 34 68 0" />
+          </g>
+          <text x="130" y="106" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="34" fill="var(--accent)">K</text>
+        </svg>
+        <span class="rivet" style="top:8px; left:8px;"></span>
+        <span class="rivet" style="top:8px; right:8px;"></span>
+        <span class="rivet" style="bottom:8px; left:8px;"></span>
+        <span class="rivet" style="bottom:8px; right:8px;"></span>
+        <span class="plate-caption mono">ПРИМЕР №1 · МОНОГРАММА</span>
+      </div>
+      <div class="portfolio-note">
+        <h3>Готовая работа</h3>
+        <p>Монограмма на рассеивателе фары — первая завершённая гравировка.</p>
+        <p>Портфолио пополняется с каждым новым клиентом — свежие примеры появятся здесь и в Telegram.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="tape divider" aria-hidden="true"></div>
+
+  <section id="contact">
+    <span class="eyebrow">Контакты</span>
+    <h2 class="section-title">Записаться на гравировку</h2>
+    <p class="section-sub">Работаю в Москве. Пишите или звоните любым удобным способом — отвечаю обычно в течение дня.</p>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <span class="k">Телефон</span>
+        <a class="plate-lg" href="tel:+79151384145">
+          <span class="bolt tl"></span><span class="bolt br"></span>
+          <span class="num">915 138‑41‑45</span>
+          <span class="strip"><span class="stars">★</span><span class="rus">RUS</span></span>
+        </a>
+      </div>
+      <div class="contact-card">
+        <span class="k">Telegram</span>
+        <a class="plate-lg" href="https://t.me/Withumorka">
+          <span class="bolt tl"></span><span class="bolt br"></span>
+          <span class="num">WITHUMORKA</span>
+          <span class="strip"><span class="stars">★</span><span class="rus">TG</span></span>
+        </a>
+      </div>
+      <div class="contact-card">
+        <span class="k">Город</span>
+        <span class="plate-lg" style="cursor:default;">
+          <span class="bolt tl"></span><span class="bolt br"></span>
+          <span class="num">МОСКВА 777</span>
+          <span class="strip"><span class="stars">★</span><span class="rus">RUS</span></span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>FARAGRAV · ГАРАЖНАЯ РАБОТА, РУЧНАЯ СБОРКА</span>
+    <span>MOSCOW / RUS</span>
+  </footer>
+
+</div>
